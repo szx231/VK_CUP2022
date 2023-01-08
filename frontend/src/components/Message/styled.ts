@@ -54,7 +54,9 @@ export const FlagText = styled.div`
   line-height: 20px;
 `;
 
-export const FlagImage = styled.div``;
+export const FlagImage = styled.div`
+  display: flex;
+`;
 
 export const Card = styled.div`
   display: flex;
@@ -125,6 +127,31 @@ export const MessageDate = styled.div`
   line-height: 18px;
   color: var(--message-date-color);
   margin-right: 17px;
+`;
+
+export const AvatarSkeleton = styled.td``;
+
+export const FirstLetterNicname = styled.div`
+  width: '32px';
+  height: '32px';
+  border-radius: 50%;
+  border: none;
+  background-color: '#ffb980';
+  color: 'blue';
+  font-family: 'Arial';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  margin: 0 auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
 `;
 
 export const Important = styled.div``;

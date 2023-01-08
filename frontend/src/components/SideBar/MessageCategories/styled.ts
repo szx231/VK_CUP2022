@@ -22,6 +22,7 @@ export const Item = styled.button<IItem>`
   color: var(--text-color);
   padding: 8px 16px;
   border-radius: 8px;
+  width: 100%;
 `;
 
 export const Image = styled.div`

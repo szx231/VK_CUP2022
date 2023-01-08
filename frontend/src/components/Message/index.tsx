@@ -1,7 +1,8 @@
 import { useStore, useState } from 'effector-react';
 import { useEffect } from 'react';
 import { ReactComponent as ImportantImage } from '../../assets/important.svg';
-import { $messages, $error, fetchMessages } from '../../store/FetchData';
+import { $messages, $error, fetchMessagesFx } from '../../store/FetchData';
+import { ReactComponent as RegestrationImage } from '../../assets/regestration.svg';
 import {
   Wrapp,
   Container,
@@ -13,6 +14,8 @@ import {
   Card,
   Person,
   DateAndNameWrapp,
+  AvatarSkeleton,
+  FirstLetterNicname,
   AddresseesInfoWrapp,
   Dot,
   Avatar,
@@ -30,22 +33,15 @@ import {
   MessageDescription,
 } from './styled';
 
+import { userNameFirstLetter } from '../../helpers/FirstLetterUserNickName';
+import { messageCategory } from '../../helpers/MessageCategoryImage';
+
+import { useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { $currentCategory } from '../../store/CurrentCategory';
+
 const month = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
 
-export const Message = ({
-  titleText,
-  flagText,
-  isRead,
-  avatar,
-  name,
-  // MessageDate,
-  important,
-  addressees,
-  messageDescription,
-  attachedFilesCount,
-  pictures,
-  filesSize,
-}) => {
+export const Message = () => {
   const messageSentToday = (date) => {
     const currentDay = Date.now();
     const messageDate = Date.parse(date);
@@ -61,13 +57,19 @@ export const Message = ({
     return `Сегодня, ${messageSentHours}: ${messageSentMinutes}`;
   };
 
+  const currentCategory = useStore($currentCategory);
+
   const messages = useStore($messages);
   const error = useStore($error);
-  const isLoading = useStore(fetchMessages.pending);
+  const isLoading = useStore(fetchMessagesFx.pending);
 
-  useEffect(() => {
-    fetchMessages();
-  }, []);
+  // const [searchParams, setSearchParams] = useSearchParams({ category: currentCategory });
+
+  // useEffect(() => {
+  //   setSearchParams({ category: currentCategory });
+  // }, [currentCategory]);
+
+  const { id } = useParams();
 
   const adressees = (data) => {
     const startString = 'Кому: Вы, ';
@@ -98,42 +100,49 @@ export const Message = ({
     return `${dataLength} файлов`;
   };
 
-  return (
-    <Wrapp>
-      <Container>
-        <Title>
-          <TitleText>{messages[36].title}</TitleText>
-          <FlagWrapper>
-            <FlagText>{flagText}</FlagText>
-            <FlagImage />
-          </FlagWrapper>
-        </Title>
-        <Card>
-          <Person>
-            <Dot messageIsRead={false} />
-            <Avatar image={messages[36].author.avatar} />
-            <AddresseesInfoWrapp>
-              <TextContainer>
-                <Name>{`${messages[36].author.name} ${messages[36].author.surname}`}</Name>
-                <MessageDate>{messageSentToday(messages[36].date)}</MessageDate>
-                <Important>{messages[36].important && <ImportantImage />}</Important>
-              </TextContainer>
-              <Addressees>{adressees(messages[36].to)}</Addressees>
-            </AddresseesInfoWrapp>
-          </Person>
-          {messages[36].doc && (
-            <>
-              <AttachedPictures>{getFiles(messages[36].doc)}</AttachedPictures>
-              <AttachedFiles>
-                <AttachedFilesCount>{filesCount(messages[36].doc)}</AttachedFilesCount>
-                <AttachedFilesDownload>Скачать</AttachedFilesDownload>
-                {/* <AttachedFilesDownloadSize>{filesSize}</AttachedFilesDownloadSize> */}
-              </AttachedFiles>
-            </>
-          )}
-          <MessageDescription>{messages[36].text}</MessageDescription>
-        </Card>
-      </Container>
-    </Wrapp>
-  );
+  console.log(messages, '1');
+
+  return;
+  // <Wrapp>
+  //   <Container>
+  //     <Title>
+  //       <TitleText>{messages[36].title}</TitleText>
+  //       <FlagWrapper>
+  //         <FlagText>{messages[41].flag}</FlagText>
+  //         <FlagImage>{messageCategory(messages[41].flag)}</FlagImage>
+  //       </FlagWrapper>
+  //     </Title>
+  //     <Card>
+  //       <Person>
+  //         <Dot messageIsRead={false} />
+  //         {messages[36].author.avatar ? (
+  //           <Avatar image={messages[36].author.avatar} />
+  //         ) : (
+  //           <AvatarSkeleton>
+  //             <FirstLetterNicname>{userNameFirstLetter(messages[36].author.name)}</FirstLetterNicname>
+  //           </AvatarSkeleton>
+  //         )}
+  //         <AddresseesInfoWrapp>
+  //           <TextContainer>
+  //             <Name>{`${messages[36].author.name} ${messages[36].author.surname}`}</Name>
+  //             <MessageDate>{messageSentToday(messages[36].date)}</MessageDate>
+  //             <Important>{messages[36].important && <ImportantImage />}</Important>
+  //           </TextContainer>
+  //           <Addressees>{adressees(messages[36].to)}</Addressees>
+  //         </AddresseesInfoWrapp>
+  //       </Person>
+  //       {messages[36].doc && (
+  //         <>
+  //           <AttachedPictures>{getFiles(messages[36].doc)}</AttachedPictures>
+  //           <AttachedFiles>
+  //             <AttachedFilesCount>{filesCount(messages[36].doc)}</AttachedFilesCount>
+  //             <AttachedFilesDownload>Скачать</AttachedFilesDownload>
+  //             {/* <AttachedFilesDownloadSize>{filesSize}</AttachedFilesDownloadSize> */}
+  //           </AttachedFiles>
+  //         </>
+  //       )}
+  //       <MessageDescription>{messages[36].text}</MessageDescription>
+  //     </Card>
+  //   </Container>
+  // </Wrapp>
 };

@@ -43,6 +43,7 @@ export const ImageWrapp = styled.td`
   width: 32px;
   height: 32px;
   border: none;
+  vertical-align: middle;
 `;
 
 export const Image = styled.div<TImage>`

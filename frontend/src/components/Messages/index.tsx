@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Wrapp, Table, Tbody } from './styled';
 import { MessageCard } from './MessageCard';
+import { $messages, fetchMessagesFx } from '../../store/FetchData';
+import { useStore } from 'effector-react';
+import { $currentCategory } from '../../store/CurrentCategory';
+
+import { useSearchParams, Link } from 'react-router-dom';
 
 export const Messages = ({ children }) => {
-  const [state, setState] = useState([]);
-  useEffect(() => {
-    fetch('http://localhost:5000/api/todos/1')
-      .then((response) => response.json())
-      .then((json) => setState(json));
-  }, []);
+  const state = useStore($messages);
+  const currentCategory = useStore($currentCategory);
 
-  console.log(state);
+  useEffect(() => {
+    fetchMessagesFx(currentCategory);
+  }, []);
 
   return (
     <Wrapp>

@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { createEffect, createStore } from 'effector';
+import { instance } from './api';
 
 interface IMessages {
+  [x: string]: any;
   id: number;
   name: string;
   email: string;
@@ -10,8 +12,11 @@ interface IMessages {
 export const $messages = createStore<IMessages[]>([]);
 export const $error = createStore<string>('');
 
-export const fetchMessages = createEffect(() => axios.get<IMessages[]>(`http://localhost:5000/api/todos/1`));
+export const fetchMessagesFx = createEffect(async (category: string) => {
+  const resp = await axios.post('http://localhost:5000/api/todos', { category1: category });
+  return resp.data;
+});
 
-$messages.on(fetchMessages.doneData, (_, response) => response.data);
+$messages.on(fetchMessagesFx.doneData, (_, response) => response);
 
-$error.on(fetchMessages.fail, (_, { error }) => error.message).reset(fetchMessages);
+$error.on(fetchMessagesFx.fail, (_, { error }) => error.message).reset(fetchMessagesFx);

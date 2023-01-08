@@ -4,6 +4,7 @@ import { ReactComponent as BookMarkImage } from '../../../assets/bookmark.svg';
 import { ReactComponent as AttachImage } from '../../../assets/attach.svg';
 import { ReactComponent as CheckArrow } from '../../../assets/checkBoxArrow.svg';
 import { messageCategory } from '../../../helpers/MessageCategoryImage';
+import { Link, redirect, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
   Tr,
@@ -24,6 +25,9 @@ import {
   AvatarSkeleton,
   FirstLetterNicname,
 } from './styled';
+import { userNameFirstLetter } from '../../../helpers/FirstLetterUserNickName';
+import { useStore } from 'effector-react';
+import { $currentCategory } from '../../../store/CurrentCategory';
 
 const month = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
 
@@ -40,8 +44,16 @@ export const MessageCard = ({
   messageIsBookMark,
   ind,
   element,
+  categoryQuery,
 }) => {
   const [markMessages, setMarkMessages] = useState([]);
+  const navigate = useNavigate();
+  const currentCategory = useStore($currentCategory);
+  const [searchParams, setSearchParams] = useSearchParams({ category: currentCategory });
+
+  useEffect(() => {
+    setSearchParams({ category: currentCategory });
+  }, [currentCategory]);
 
   const messageSentToday = (date) => {
     const currentDay = Date.now();
@@ -57,10 +69,6 @@ export const MessageCard = ({
     return `${messageSentHours}: ${messageSentMinutes}`;
   };
 
-  const userNameFirstLetter = (name) => {
-    return name[0].toLowerCase();
-  };
-
   const messageIsMark = (el, ind) => {
     el.read = false;
     setMarkMessages((prev) => {
@@ -71,8 +79,12 @@ export const MessageCard = ({
     });
   };
 
+  const redirectToPage = (e) => {
+    return navigate(`/Mail/${searchParams}/message/${1}`);
+  };
+
   return (
-    <Tr messageIsRead={read} isChecked={markMessages.includes(ind)}>
+    <Tr onClick={() => redirectToPage()} messageIsRead={read} isChecked={markMessages.includes(ind)}>
       <DotMessageStatus>
         <Dot messageIsRead={read} />
       </DotMessageStatus>

@@ -11,10 +11,12 @@ interface ILayout {
 
 export const Layout: FC<ILayout> = ({ children }) => {
   return (
-    <Container>
+    <>
       <Header />
-      <Body content={children} />
-      <Theme />
-    </Container>
+      <Container>
+        <Body content={children} />
+        <Theme />
+      </Container>
+    </>
   );
 };
